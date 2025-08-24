@@ -26,7 +26,7 @@ export function globalErrorHandler(err: HttpError, req: Request, res: Response, 
   }
 
   // Validation errors (example: Zod / Joi / Yup)
-  if ((err as any).name === 'ValidationError') {
+  if ((err as any).name === 'ValidationError' || err.name === 'ZodError') {
     return res.status(400).json({
       success: false,
       message: 'Validation failed',

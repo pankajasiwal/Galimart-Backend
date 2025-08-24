@@ -14,6 +14,53 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Contact {
+  id      String  @id @default(cuid())
+  email   String? @unique
+  phone   String? @unique
+  address String
+  pincode Int
+  state   String
+  city    String
+
+  customer  Customer?
+  shopOwner ShopOwner?
+}
+
+model ShopOwner {
+  id              String @id @default(cuid())
+  ownerName       String
+  shopName        String
+  shopDescription String
+  contactId       String @unique
+  userId          String @unique
+
+  user    User    @relation(fields: [userId], references: [id])
+  contact Contact @relation(fields: [contactId], references: [id])
+}
+
+model Customer {
+  id        String @id @default(cuid())
+  name      String
+  userId    String @unique
+  contactId String @unique
+
+  user    User    @relation(fields: [userId], references: [id])
+  contact Contact @relation(fields: [contactId], references: [id])
+}
+
 model User {
-  id String @id @default(cuid())
+  id        String   @id @default(cuid())
+  password  String
+  role      Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  customer  Customer?
+  shopOwner ShopOwner?
+}
+
+enum Role {
+  SHOP_OWNER
+  CUSTOMER
 }
