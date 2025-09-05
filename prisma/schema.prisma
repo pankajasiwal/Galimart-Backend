@@ -16,15 +16,15 @@ datasource db {
 
 model Contact {
   id      String  @id @default(cuid())
-  email   String? @unique
-  phone   String? @unique
+  email   String?
+  phone   String?
   address String
   pincode Int
   state   String
   city    String
 
   customer  Customer?
-  shopOwner ShopOwner?
+  shopOwner ShopOwner[]
 }
 
 model ShopOwner {
@@ -32,11 +32,13 @@ model ShopOwner {
   ownerName       String
   shopName        String
   shopDescription String
-  contactId       String @unique
+  contactId       String
   userId          String @unique
 
   user    User    @relation(fields: [userId], references: [id])
   contact Contact @relation(fields: [contactId], references: [id])
+
+  @@unique([ownerName, shopName, contactId])
 }
 
 model Customer {
@@ -57,7 +59,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   customer  Customer?
-  shopOwner ShopOwner?
+  shopOwner ShopOwner[]
 }
 
 enum Role {
