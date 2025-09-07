@@ -8,9 +8,9 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     const validatedValues = ShopOwnerSchema.parse(req.body);
 
     if (validatedValues) {
-      const shopUser = await registerShopOwner(validatedValues);
+      const response = await registerShopOwner(validatedValues);
 
-      return res.success('Successfully Registered', shopUser, 201);
+      return res.success('Successfully Registered', response, 201);
     }
   } catch (error) {
     return next(error);
@@ -25,9 +25,9 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       throw createHttpError(400, 'Phone and password are required');
     }
 
-    const shopOwner = await loginShopUser(phone, password);
+    const response = await loginShopUser(phone, password);
 
-    return res.success('Login successful', shopOwner);
+    return res.success('Login successful', response, 200);
   } catch (error) {
     next(error);
   }

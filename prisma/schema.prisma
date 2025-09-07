@@ -58,11 +58,21 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  customer  Customer?
-  shopOwner ShopOwner[]
+  customer     Customer?
+  shopOwner    ShopOwner[]
+  RefreshToken RefreshToken?
 }
 
 enum Role {
   SHOP_OWNER
   CUSTOMER
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String   @unique
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
 }
